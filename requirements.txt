@@ -1,0 +1,34 @@
+# =============================================================
+#  CLAUDE EM VOZ - bibliotecas necessarias
+#
+#  Instalar com:   pip install -r requirements.txt
+#  Ou, sem fixar versao:
+#      pip install faster-whisper sounddevice numpy pynput pywin32 comtypes
+#
+#  Estas sao as versoes exatas em que o programa foi conferido,
+#  em Windows 11 Pro com Python 3.13.1.
+# =============================================================
+
+# Reconhecimento de fala, rodando no proprio processador.
+faster-whisper==1.2.1
+
+# Captura do microfone.
+sounddevice==0.5.5
+numpy==2.5.2
+
+# Ler a tecla de acionar e digitar o texto na janela.
+pynput==1.8.2
+
+# Descobrir qual janela esta na frente e quem e o processo dela.
+pywin32==312
+
+# A VOZ. E por aqui que o programa alcanca o SAPI do Windows.
+# Nao tire esta linha: sem ela tudo funciona, menos falar.
+comtypes==1.4.16
+
+# -------------------------------------------------------------
+# Vem junto, instalado automaticamente pelo faster-whisper e pelo
+# sounddevice. Anotado so como referencia do que funcionava:
+#   av 18.1.0, ctranslate2 4.8.1, huggingface_hub 1.27.0,
+#   onnxruntime 1.28.0, tokenizers 0.23.1, cffi
+# -------------------------------------------------------------

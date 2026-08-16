@@ -1,0 +1,49 @@
+# =============================================================
+#  O que NAO vai para o repositorio.
+# =============================================================
+
+# -------------------------------------------------------------
+#  Conteudo seu, e nao do programa.
+#
+#  O historico guarda tudo o que voce ja ditou; o registro guarda
+#  o texto das respostas que foram lidas em voz alta. Os dois sao
+#  refeitos sozinhos e nao servem a quem for instalar - subi-los
+#  seria publicar as suas conversas junto com o codigo.
+# -------------------------------------------------------------
+historico_de_voz.txt
+registro.txt
+perguntas_pendentes.jsonl
+
+# Qual metade esta ligada AGORA. E refeito com tudo ligado a cada
+# partida, entao versiona-lo so geraria mudanca sem sentido.
+interruptor.json
+
+# -------------------------------------------------------------
+#  Os instaladores guardados (1,1 GB).
+#
+#  Ficam de fora por imposicao do GitHub, que recusa arquivo
+#  acima de 100 MB - e ha tres aqui bem acima disso. Nao e perda:
+#  sao copias de programas que qualquer um baixa da fonte
+#  oficial, e nao codigo deste projeto. O INSTALAR_DO_ZERO.txt
+#  diz de onde vem cada um.
+# -------------------------------------------------------------
+Instaladores/
+
+# E a mesma pasta compactada, quando alguem a empacota para levar
+# num pendrive ou para a nuvem. Tem centenas de MB: nao passa nem
+# perto do limite do GitHub.
+*.rar
+*.zip
+*.7z
+*.tar.gz
+
+# -------------------------------------------------------------
+#  Restos do Python e do sistema.
+# -------------------------------------------------------------
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+Thumbs.db
+desktop.ini

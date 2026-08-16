@@ -1,0 +1,24 @@
+# =============================================================
+#  Fim de linha.
+#
+#  Este e o projeto para Windows, e os arquivos .bat sao lidos
+#  pelo cmd, que espera o fim de linha do Windows. Os arquivos
+#  de texto e de codigo ficam guardados no padrao do git (Linux)
+#  e sao entregues no padrao da maquina de quem clonar.
+# =============================================================
+
+* text=auto
+
+# O cmd e exigente: garantimos o fim de linha do Windows nos .bat.
+*.bat   text eol=crlf
+
+*.py    text
+*.txt   text
+*.md    text
+*.json  text
+
+# Binarios, se um dia entrarem: nao devem ser tocados.
+*.exe   binary
+*.bin   binary
+*.whl   binary
+*.wav   binary

@@ -1,0 +1,646 @@
+=========================================================
+ CLAUDE EM VOZ - INSTALAR DO ZERO
+ (receita completa, para computador recem-formatado)
+=========================================================
+
+Este arquivo e a RECEITA. Ele nao explica por que as coisas foram
+decididas assim - isso esta no PERGUNTAS_E_RESPOSTAS.txt. Aqui esta
+so o que precisa ser feito, na ordem, para o programa funcionar
+numa maquina limpa, sem precisar pedir ajuda a ninguem.
+
+So uma coisa e pressuposta, e vem logo na secao abaixo: o Claude
+Code ja instalado. Todo o resto e montado do zero aqui.
+
+Ambiente conferido: Windows 11 Pro, Python 3.13.1, Claude Code 2.1.233.
+
+
+---------------------------------------------------------
+ O QUE VOCE JA PRECISA TER: O CLAUDE CODE
+---------------------------------------------------------
+
+Este programa e um acessorio do Claude Code: ele le em voz alta as
+respostas do Claude e escreve o que voce dita. Entao o Claude Code
+ja precisa estar instalado e com a sua conta conectada.
+
+E ele NAO E INSTALADO por aqui - nem pelo INSTALAR_TUDO.bat, nem
+pelo caminho a mao. O motivo e simples: quem chega neste programa ja
+usa o Claude todo dia, e passar um instalador por cima trocaria a
+versao dele. Uma instalacao que funciona nao se mexe para acrescentar
+um acessorio.
+
+Para conferir que esta tudo certo, abra o Prompt de Comando e digite:
+
+    claude --version
+
+Se responder um numero de versao, pode seguir. Se disser que nao
+conhece o comando, instale o Claude Code primeiro, pela pagina
+oficial, e so depois volte para ca:
+
+    https://docs.claude.com/en/docs/claude-code/setup
+
+
+---------------------------------------------------------
+ O CAMINHO CURTO: DOIS CLIQUES
+---------------------------------------------------------
+
+Copie a pasta ClaudeEmVoz para o computador e de dois cliques em:
+
+    INSTALAR_TUDO.bat
+
+Ele instala tudo sozinho, na ordem, pulando o que ja existir:
+Python, Git, as bibliotecas, os reconhecedores de fala e os quatro
+ganchos - estes ultimos ja com os caminhos deste computador, sem
+voce editar nada. Leva uns 10 minutos.
+
+Do Claude Code ele nao chega perto: so olha se esta ai.
+
+No fim ele diz o que ficou faltando. Duas coisas ficam por sua
+conta, porque vem do Windows e nao ha como guarda-las aqui:
+
+    - a voz em portugues  (PASSO 6, adiante)
+    - a liberacao do microfone  (PASSO 6, adiante)
+
+Se aparecer uma janelinha azul do Windows pedindo permissao, e a
+instalacao do Git: responda que sim.
+
+Deu tudo certo? Voce nao precisa ler mais nada; pule para o
+PASSO 9, que sao os testes de conferencia. O resto deste arquivo e
+o mesmo caminho feito a mao, passo a passo, para quando alguma
+coisa falhar ou voce quiser entender o que foi feito.
+
+Tempo do caminho a mao: 20 minutos, quase tudo esperando o Windows.
+
+
+---------------------------------------------------------
+ NAO PRECISA BAIXAR NADA: JA ESTA TUDO AQUI
+---------------------------------------------------------
+
+Dentro desta pasta existe uma outra, chamada  Instaladores. Nela
+estao guardados os programas e os arquivos de que a instalacao
+precisa, nas versoes exatas em que tudo foi conferido:
+
+  Instaladores\programas
+      python-3.13.1-amd64.exe        o Python
+      Git-2.55.0.4-64-bit.exe        o Git (fornece o "bash")
+      claude-2.1.233-win32-x64.exe   o Claude Code, apenas GUARDADO
+      instalar_claude_code.ps1       o instalador oficial dele,
+                                     tambem apenas guardado
+
+  Instaladores\bibliotecas
+      as 32 bibliotecas do Python, prontas para instalar
+
+  Instaladores\modelos_de_voz
+      os reconhecedores de fala, 680 MB, ja baixados. Sao tres
+      modelos, mas o programa usa dois: o terceiro, menor, sobrou
+      das medicoes e nao atrapalha
+
+ATENCAO aos dois arquivos do Claude, ali na primeira pasta. Eles
+estao guardados apenas como copia de seguranca da versao em que tudo
+foi conferido. Nada nesta receita os executa, e voce tambem nao deve
+executa-los: passar um deles por cima do Claude que voce ja usa
+trocaria a versao dele.
+
+Isso ocupa 1,1 GB e existe por um motivo: link sai do ar, versao
+nova quebra o que funcionava, e internet pode faltar justamente no
+dia em que voce precisar reinstalar. Com esta pasta, os nove passos
+adiante funcionam com a internet desligada, do comeco ao fim. Ela so
+faria falta se o Claude Code ainda nao estivesse neste computador -
+e ai o problema seria outro, anterior a esta receita.
+
+Os links oficiais continuam anotados em cada passo, para o dia em
+que voce quiser atualizar alguma coisa de proposito.
+
+
+---------------------------------------------------------
+ ANTES DE FORMATAR - O QUE GUARDAR
+---------------------------------------------------------
+
+Copie estas duas coisas para um pendrive ou para a nuvem:
+
+  1. A pasta inteira  ClaudeEmVoz  (1,1 GB). Ela leva junto o
+     programa, a documentacao e todos os instaladores.
+
+  2. O arquivo  C:\Users\SEU_NOME\.claude\settings.json
+     (sao os quatro ganchos; sem ele o programa nao liga sozinho).
+     A pasta .claude comeca com ponto e fica escondida - digite o
+     caminho na barra de endereco do Explorador para chegar nela.
+     Na mesma pasta escondida, leve tambem  commands\voz.md , que
+     e o comando  /voz . Os dois sao refeitos por
+     configurar_ganchos.py, entao guarda-los e so comodidade.
+
+So isso. Nao precisa guardar: registro.txt, historico_de_voz.txt,
+perguntas_pendentes.jsonl e a pasta __pycache__. Sao arquivos que o
+programa refaz sozinho.
+
+E lembre-se de que, depois de formatar, o Claude Code tambem precisa
+voltar - mas isso e por sua conta e vem ANTES desta receita, pela
+pagina oficial. Aqui nada o instala, de proposito.
+
+
+---------------------------------------------------------
+ O QUE VAI SER INSTALADO (visao geral)
+---------------------------------------------------------
+
+  Python 3.13         faz o programa rodar
+  Git para Windows    fornece o "bash", que os ganchos usam
+  32 bibliotecas      reconhecimento de fala, microfone, teclado
+  2 reconhecedores    os modelos que entendem a sua voz: um rapido,
+                      que escreve enquanto voce fala, e um bom, que
+                      corrige a frase no fim
+  Voz em portugues    vem do Windows, mas precisa ser ativada
+  4 ganchos           ligam e desligam tudo sozinho, falam as
+                      perguntas na hora e atendem o comando "voz"
+
+E o que NAO vai ser instalado, para ficar dito de novo: o Claude
+Code. Ele ja e seu, ja esta configurado, e fica como esta.
+
+Os nove passos abaixo cobrem isso, um por vez.
+
+
+---------------------------------------------------------
+ PASSO 1 - COLOCAR A PASTA DO PROGRAMA NO COMPUTADOR
+---------------------------------------------------------
+
+Copie a pasta ClaudeEmVoz do pendrive para o computador. Ela e a
+primeira coisa, porque todo o resto sai de dentro dela.
+
+Ela pode ficar em qualquer lugar, mas ANOTE o caminho completo -
+ele aparece cinco vezes no PASSO 7.
+
+No computador de origem ela ficava em:
+    C:\Users\smist\Desktop\Apolo\Voz_Claude_Cloud\ClaudeEmVoz
+
+Se voce puser no mesmo lugar e o seu nome de usuario for o mesmo,
+podera copiar o PASSO 7 sem mudar uma virgula.
+
+
+---------------------------------------------------------
+ PASSO 2 - INSTALAR O PYTHON 3.13
+---------------------------------------------------------
+
+Dois cliques em:
+    Instaladores\programas\python-3.13.1-amd64.exe
+
+NA PRIMEIRA TELA DO INSTALADOR, marque a caixinha
+"Add python.exe to PATH". Ela fica embaixo e vem desmarcada. Sem
+ela, nenhum comando deste guia funciona.
+
+Depois clique em "Install Now".
+
+Para conferir, abra o Prompt de Comando (tecle Windows, digite
+"cmd", Enter) e digite:
+
+    python --version
+
+Tem que responder  Python 3.13.1.
+
+ONDE ELE FICA: anote este caminho, o PASSO 7 vai precisar dele.
+    C:\Users\SEU_NOME\AppData\Local\Programs\Python\Python313\
+
+Se voce nao souber onde ficou, descubra com:
+    python -c "import sys; print(sys.executable)"
+
+Versao mais nova, se um dia quiser:
+    https://www.python.org/downloads/windows/
+
+
+---------------------------------------------------------
+ PASSO 3 - INSTALAR O GIT PARA WINDOWS
+---------------------------------------------------------
+
+Dois cliques em:
+    Instaladores\programas\Git-2.55.0.4-64-bit.exe
+
+Clique "Next" em tudo, sem mudar nada.
+
+Isso NAO e para versionar codigo. E porque os quatro ganchos do
+Claude Code rodam com "shell": "bash", e quem fornece o bash no
+Windows e o Git. Sem ele, os ganchos falham em silencio e o
+programa nunca liga sozinho.
+
+Versao mais nova, se um dia quiser:
+    https://git-scm.com/download/win
+
+
+---------------------------------------------------------
+ PASSO 4 - CONFERIR O CLAUDE CODE (nao instalar!)
+---------------------------------------------------------
+
+Este passo nao instala nada. Ele so confirma que o Claude Code, que
+voce ja usa, esta ao alcance dos comandos.
+
+Se voce ja conferiu isso la na primeira secao, esta feito: e a mesma
+conferencia. Ela reaparece aqui para nao sumir da ordem dos passos, e
+porque agora vem com o que fazer se a resposta nao for a esperada.
+
+No Prompt de Comando:
+
+    claude --version
+
+Respondeu um numero de versao? Pronto, siga para o PASSO 5.
+
+NAO RODE o claude-2.1.233-win32-x64.exe nem o instalar_claude_code.ps1
+que estao na pasta Instaladores. Eles estao guardados so como copia
+de seguranca da versao conferida. Passar um deles por cima da sua
+instalacao trocaria a versao do Claude que voce ja usa, e este
+programa e apenas um acessorio: nao vale o risco de estragar o
+principal.
+
+SE O COMANDO NAO FOR RECONHECIDO, quase sempre e uma destas duas
+coisas, nenhuma delas exigindo reinstalar:
+
+  - a janela do Prompt foi aberta antes de o Claude ser instalado e
+    nao enxerga a mudanca. Feche, abra de novo e repita.
+  - a pasta dele nao esta no caminho de busca. Ela costuma ser
+    C:\Users\SEU_NOME\.local\bin - acrescente-a assim: tecle
+    Windows, digite "variaveis de ambiente", abra "Editar as
+    variaveis de ambiente do sistema" > Variaveis de ambiente > na
+    lista de cima, Path > Editar > Novo > cole o caminho. Feche e
+    abra o Prompt.
+
+Se voce realmente nao tiver o Claude Code neste computador, instale-o
+pela pagina oficial antes de continuar - e so nesse caso vai precisar
+de internet, para baixa-lo e entrar na conta:
+
+    https://docs.claude.com/en/docs/claude-code/setup
+
+
+---------------------------------------------------------
+ PASSO 5 - INSTALAR AS BIBLIOTECAS E OS RECONHECEDORES
+---------------------------------------------------------
+
+Dois cliques em  instalar.bat  (aqui nesta pasta).
+
+Ele faz tudo sozinho e vai mostrando o que esta acontecendo:
+instala as 32 bibliotecas, poe os reconhecedores de fala no lugar
+e confere que eles carregam. Usa o que esta guardado na pasta
+Instaladores - com o cabo de rede desligado funciona igual.
+
+Se a pasta Instaladores nao estiver junto, ele avisa e busca na
+internet sozinho. Nesse caso sao uns 770 MB e alguns minutos.
+
+QUERENDO FAZER NA MAO, no Prompt de Comando dentro desta pasta:
+
+    python -m pip install --no-index --find-links Instaladores\bibliotecas -r requirements.txt
+
+E copie a pasta
+    Instaladores\modelos_de_voz\huggingface
+para dentro de
+    C:\Users\SEU_NOME\.cache\
+
+Sem os instaladores guardados, os mesmos dois passos pela internet
+seriam:
+
+    pip install faster-whisper sounddevice numpy pynput pywin32 comtypes
+    python claude_em_voz.py --baixar
+
+ATENCAO ao comtypes no fim daquela linha. E ele que fala: a voz sai
+pelo SAPI do proprio Windows, alcancado pelo comtypes. Sem ele o
+programa instala, liga, escreve o que voce dita - e fica MUDO.
+
+
+---------------------------------------------------------
+ PASSO 6 - LIGAR A VOZ EM PORTUGUES E O MICROFONE
+---------------------------------------------------------
+
+Estes dois vem do Windows, entao nao ha como guarda-los na pasta.
+Sao os unicos ajustes feitos a mao.
+
+A VOZ (para ele falar com voce)
+
+Confira primeiro se ja existe. Nesta pasta:
+
+    python claude_em_voz.py --vozes
+
+Se aparecer alguma coisa com "Portuguese(Brazil)" - por exemplo
+"Microsoft Maria Desktop - Portuguese(Brazil)" - pule esta parte.
+
+Se so aparecer voz em ingles, instale a brasileira:
+    Configuracoes do Windows
+      > Hora e idioma
+      > Idioma e regiao
+      > Adicionar idioma > Portugues (Brasil)
+      > nos tres pontinhos ao lado dele, "Opcoes de idioma"
+      > baixe o item "Fala"
+    Reinicie o computador e rode  --vozes  de novo.
+
+O MICROFONE (para voce falar com ele)
+
+    Configuracoes do Windows
+      > Privacidade e seguranca
+      > Microfone
+      > ligue "Acesso ao microfone"
+      > e ligue tambem "Permitir que aplicativos da area de
+        trabalho acessem seu microfone"
+
+Essa segunda chave e a que costuma ficar desligada, e sem ela o
+programa grava silencio sem reclamar de nada.
+
+Para conferir qual microfone ele vai usar:
+    python claude_em_voz.py --dispositivos
+
+
+---------------------------------------------------------
+ PASSO 7 - INSTALAR OS QUATRO GANCHOS
+---------------------------------------------------------
+
+Os ganchos sao o que faz o programa ligar e desligar junto com o
+Claude Code, o que faz as perguntas de multipla escolha serem
+faladas NA HORA, e o que atende o comando "voz", que liga e desliga
+cada metade sem fechar nada.
+
+DO JEITO FACIL, e o recomendado:
+
+    python configurar_ganchos.py
+
+So isso. Ele descobre sozinho onde esta esta pasta e qual e o seu
+Python, escreve os quatro ganchos com os caminhos certos, preserva o
+que ja existia no arquivo (tema, permissoes, ganchos seus) e guarda
+uma copia de seguranca do arquivo antigo antes de tocar nele. Ele
+tambem cria o comando  /voz , que e um arquivo separado:
+
+    C:\Users\SEU_NOME\.claude\commands\voz.md
+
+E esse arquivo que faz o  /voz  aparecer na lista quando voce digita
+a barra. Sem ele o menu continua respondendo por  voz  sem barra,
+pelo gancho - mas  /voz  seria recusado como comando desconhecido.
+Se voce for montar tudo a mao, veja o conteudo dele com
+  python configurar_ganchos.py --mostrar
+que imprime o arquivo pronto, com os caminhos desta maquina.
+
+Rodar duas vezes nao duplica nada, e
+
+    python configurar_ganchos.py --remover
+
+desfaz. O INSTALAR_TUDO.bat ja chama isso no ultimo passo dele
+(o 5 de 5); a secao a seguir e para fazer a mesma coisa a mao.
+
+DO JEITO MANUAL, abra o arquivo:
+    C:\Users\SEU_NOME\.claude\settings.json
+
+(Ele so existe depois de o Claude Code ter rodado pelo menos uma
+vez. Se nao existir, crie um arquivo com esse nome. A pasta
+.claude fica escondida: digite o caminho na barra de endereco.)
+
+Se voce guardou o seu settings.json antes de formatar, basta
+devolve-lo ao lugar e conferir os caminhos.
+
+Se o arquivo ja tiver conteudo, acrescente SO o trecho "hooks",
+sem apagar o resto. Se estiver vazio, cole o texto inteiro abaixo.
+
+------------------------ cole daqui ---------------------
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "AskUserQuestion",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "{ cat; echo; } >> \"C:/Users/smist/Desktop/Apolo/Voz_Claude_Cloud/ClaudeEmVoz/perguntas_pendentes.jsonl\"",
+            "shell": "bash",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "nohup \"C:/Users/smist/AppData/Local/Programs/Python/Python313/pythonw.exe\" -X utf8 -u \"C:/Users/smist/Desktop/Apolo/Voz_Claude_Cloud/ClaudeEmVoz/claude_em_voz.py\" > \"C:/Users/smist/Desktop/Apolo/Voz_Claude_Cloud/ClaudeEmVoz/registro.txt\" 2>&1 &",
+            "shell": "bash",
+            "async": true,
+            "timeout": 15,
+            "statusMessage": "Ligando o Claude em Voz..."
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": "logout|prompt_input_exit|bypass_permissions_disabled|other",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cmd //c \"C:\\\\Users\\\\smist\\\\Desktop\\\\Apolo\\\\Voz_Claude_Cloud\\\\ClaudeEmVoz\\\\parar.bat\"",
+            "shell": "bash",
+            "timeout": 10,
+            "statusMessage": "Desligando o Claude em Voz..."
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"C:/Users/smist/AppData/Local/Programs/Python/Python313/python.exe\" -X utf8 \"C:/Users/smist/Desktop/Apolo/Voz_Claude_Cloud/ClaudeEmVoz/comando_de_voz.py\"",
+            "shell": "bash",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
+------------------------ ate aqui -----------------------
+
+O QUE TROCAR, se a pasta ou o seu nome de usuario mudarem:
+
+  - "smist" pelo seu nome de usuario do Windows, em todos os
+    lugares onde ele aparece (sao sete).
+  - o caminho da pasta ClaudeEmVoz, se voce a colocou em outro
+    lugar (aparece cinco vezes: perguntas_pendentes.jsonl,
+    claude_em_voz.py, registro.txt, parar.bat e comando_de_voz.py).
+  - o caminho do Python, se o PASSO 2 tiver instalado em outro
+    lugar. Repare que sao DOIS diferentes, e nao e descuido:
+    pythonw.exe, com "w" no fim, no gancho que liga o programa -
+    e o "w" que evita uma janela preta abrindo a cada sessao; e
+    python.exe, sem o "w", no gancho do menu da voz, porque esse
+    precisa receber o que voce digitou e devolver o menu na tela,
+    e o pythonw nasce sem essas vias.
+
+DUAS ARMADILHAS DE ESCRITA, as duas ja custaram tempo aqui:
+
+  - Nas duas primeiras linhas de comando as barras sao NORMAIS
+    (/), estilo bash. Na ultima, do parar.bat, sao barras
+    invertidas DOBRADAS (\\), porque ali quem executa e o cmd.
+    Copie exatamente como esta.
+  - Depois de salvar, feche o Claude Code e abra de novo. Ele nem
+    sempre recarrega as configuracoes na sessao que esta rodando.
+
+
+---------------------------------------------------------
+ PASSO 8 - CONFERIR A TECLA DO DITADO
+---------------------------------------------------------
+
+Pule este passo se for o mesmo teclado de sempre. O programa ja
+vem configurado para o Ctrl da ESQUERDA, segurado por 3 segundos.
+
+Se for outro computador e voce quiser outra tecla, rode:
+
+    descobrir_tecla.bat
+
+Aperte a tecla desejada e veja o nome que ele mostra. Depois abra
+claude_em_voz.py num editor de texto, procure a linha
+
+    TECLA_DE_FALA = "ctrl_l"
+
+e troque o nome entre aspas pelo que apareceu.
+
+Um aviso que vale para qualquer notebook: a tecla marcada F9 quase
+nunca manda "f9" sozinha. Neste notebook ela manda Windows+L, que
+BLOQUEIA A TELA - e o Windows trata esse atalho num nivel que
+nenhum programa comum alcanca. Por isso o padrao e o Ctrl.
+
+
+---------------------------------------------------------
+ PASSO 9 - CONFERIR QUE FUNCIONOU
+---------------------------------------------------------
+
+O ATALHO: dois cliques em  diagnostico.bat . Ele confere sozinho a
+voz, o microfone, os reconhecedores, os quatro ganchos e o Claude
+Code, e diz em voz alta o que encontrou. Se ele disser que esta tudo
+certo, faltam so os testes 3, 4 e 5 abaixo, que dependem de voce ver
+o Claude Code respondendo.
+
+Os cinco testes na ordem, cada um isolando uma parte:
+
+1) A VOZ SAI?
+       python claude_em_voz.py --teste-voz
+   Ele fala tres frases seguidas. Tem que ouvir as TRES - uma so
+   nao prova nada.
+
+2) O MICROFONE ENTENDE?
+       python claude_em_voz.py --teste-ditado
+   Grava 5 segundos e mostra na tela o que entendeu, sem escrever
+   em lugar nenhum. Fale uma frase qualquer.
+
+3) LIGA SOZINHO COM O CLAUDE?
+   Feche tudo, abra o Claude Code. Em alguns segundos ele deve
+   falar "Claude em voz iniciado" e mostrar uma faixa no canto da
+   tela com o lembrete da tecla. Depois pergunte qualquer coisa e
+   confira se a resposta e lida em voz alta.
+
+4) A PERGUNTA DE ESCOLHA E FALADA NA HORA?
+   Peca ao Claude: "me faca uma pergunta de multipla escolha".
+   A pergunta e as opcoes tem que ser faladas ANTES de voce
+   escolher. Se so falarem depois, o gancho PreToolUse do PASSO 7
+   nao esta valendo.
+
+5) O MENU DA VOZ ATENDE?
+   Digite  voz  na janela do Claude Code e aperte Enter. Tem que
+   aparecer o menu na hora, e a linha NAO pode virar pergunta para
+   o Claude. Se ele responder como se fosse uma conversa, o gancho
+   UserPromptSubmit do PASSO 7 nao esta valendo.
+
+E o ditado: clique na janela do Claude Code, SEGURE o Ctrl da
+esquerda, espere o bipe agudo (3 segundos), fale sem soltar, e
+solte ao terminar. As palavras aparecem enquanto voce fala, e a
+frase e corrigida alguns segundos depois. O Enter nunca e apertado
+sozinho - confira a frase e envie voce mesmo.
+
+
+---------------------------------------------------------
+ SE ALGUMA COISA NAO RESPONDER
+---------------------------------------------------------
+
+PRIMEIRO, PERGUNTE A ELE. Dois cliques em:
+
+    diagnostico.bat
+
+Ele confere a voz, o microfone, os dois reconhecedores, os quatro
+ganchos, o Claude Code e se o programa esta no ar - e DIZ em voz alta
+quantos problemas achou e quais sao. O que fazer em cada caso fica
+escrito na tela. Leva uns cinco segundos.
+
+E ele pega sozinho a armadilha mais provavel: se voce mover a pasta
+do programa de lugar, os quatro ganchos passam a apontar para o vazio
+e tudo para sem aviso nenhum. O conserto e rodar
+  python configurar_ganchos.py
+de dentro da pasta nova.
+
+Se quiser olhar por conta propria: o programa nao tem janela de
+proposito, entao ele conta o que fez num arquivo.
+
+    registro.txt   (nesta pasta, refeito a cada partida)
+
+E para ver tudo acontecendo ao vivo, ligue com janela:
+
+    ligar_com_janela.bat
+
+Nao adianta abrir os dois: o segundo percebe que ja existe um
+rodando e sai sozinho. Desligue o outro antes, com desligar.bat.
+
+Conferencias rapidas, na ordem em que costumam resolver:
+
+  Nao fala nada          -> falta o comtypes (PASSO 5), ou nao ha
+                            voz em portugues (PASSO 6)
+  Nao liga com o Claude  -> falta o Git/bash (PASSO 3), ou o
+                            caminho do pythonw.exe no settings.json
+                            esta errado (PASSO 7)
+  Entende so silencio    -> microfone bloqueado nas Configuracoes
+                            (PASSO 6)
+  A tecla nao responde   -> espere os dois bipes subindo; os
+                            reconhecedores levam alguns segundos
+                            para carregar, e antes disso a tecla
+                            nao vale
+  Escreve na janela      -> a tecla so vale com o Claude Code na
+  errada                    frente; clique nele antes de segurar
+  Parou de falar do      -> talvez a leitura tenha sido desligada
+  nada                      sem querer: digite  /voz  e olhe o
+                            menu. Fechar e abrir o Claude tambem
+                            devolve tudo ligado
+  "voz" virou pergunta   -> o gancho UserPromptSubmit nao esta
+  para o Claude             instalado (PASSO 7)
+  /voz nao aparece na    -> falta o arquivo voz.md na pasta
+  lista dos comandos        commands; rode configurar_ganchos.py
+                            de novo (PASSO 7)
+
+
+---------------------------------------------------------
+ OS ARQUIVOS DA PASTA, UM POR LINHA
+---------------------------------------------------------
+
+  claude_em_voz.py         o programa inteiro; os ajustes ficam
+                           todos no topo dele, comentados
+  ligar.bat                liga, sem janela nenhuma
+  desligar.bat             desliga
+  ligar_com_janela.bat     liga mostrando tudo, para diagnostico
+  parar.bat                desliga em silencio; e o que o gancho
+                           de fim de sessao chama
+  diagnostico.bat          confere tudo e DIZ em voz alta o que
+                           encontrou; e por onde comecar quando
+                           alguma coisa parar de funcionar
+  descobrir_tecla.bat      mostra o que cada tecla do seu teclado
+                           manda
+  testar.bat               confere se o programa continua correto
+                           depois de uma mudanca; so precisa do
+                           Python, e leva cinco segundos
+  testes\                  as verificacoes que o testar.bat roda
+  INSTALAR_TUDO.bat        o pacote de instalacao: dois cliques e
+                           instala tudo, do Python aos ganchos.
+                           Nao mexe no Claude Code, so confere
+  instalar.bat             so as bibliotecas e os reconhecedores,
+                           para reinstalar essa parte sozinha
+  configurar_ganchos.py    so os quatro ganchos e o comando /voz,
+                           com os caminhos deste computador;
+                           --remover desfaz
+  comando_de_voz.py        atende o comando /voz digitado na
+                           janela do Claude; nao roda sozinho
+  interruptor.json         qual metade esta ligada agora; refeito
+                           a cada partida, com tudo ligado
+  requirements.txt         as versoes exatas que funcionavam
+  Instaladores\            os programas, as bibliotecas e os
+                           reconhecedores, guardados (1,1 GB)
+  COMO_USAR.txt            o dia a dia
+  PERGUNTAS_E_RESPOSTAS.txt  o porque de cada decisao
+  INSTALAR_DO_ZERO.txt     este arquivo
+
+  registro.txt             o que aconteceu na ultima partida
+  historico_de_voz.txt     tudo o que voce ja ditou
+  perguntas_pendentes.jsonl  caixa de entrada das perguntas
+                           (apagada a cada partida)
