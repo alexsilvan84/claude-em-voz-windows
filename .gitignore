@@ -22,10 +22,12 @@ interruptor.json
 #  Os instaladores guardados (1,1 GB).
 #
 #  Ficam de fora por imposicao do GitHub, que recusa arquivo
-#  acima de 100 MB - e ha tres aqui bem acima disso. Nao e perda:
-#  sao copias de programas que qualquer um baixa da fonte
-#  oficial, e nao codigo deste projeto. O INSTALAR_DO_ZERO.txt
-#  diz de onde vem cada um.
+#  acima de 100 MB - e ha tres aqui bem acima disso.
+#
+#  Nao e perda: a pasta inteira esta guardada em
+#  https://drive.google.com/drive/folders/19REkp1EYtnQ42V-NU_FSUJ2GtzuPoOTs
+#  e o INSTALAR_DO_ZERO.txt explica como usa-la. Sem ela a
+#  instalacao tambem funciona, buscando tudo na fonte oficial.
 # -------------------------------------------------------------
 Instaladores/
 

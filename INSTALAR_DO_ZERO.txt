@@ -43,9 +43,14 @@ oficial, e so depois volte para ca:
  O CAMINHO CURTO: DOIS CLIQUES
 ---------------------------------------------------------
 
-Copie a pasta ClaudeEmVoz para o computador e de dois cliques em:
+Copie a pasta ClaudeEmVoz para o computador, ponha a pasta
+Instaladores dentro dela (veja a secao seguinte, com o link para
+baixa-la) e de dois cliques em:
 
     INSTALAR_TUDO.bat
+
+Sem a pasta Instaladores tambem funciona: ele busca tudo na
+internet, e demora alguns minutos a mais.
 
 Ele instala tudo sozinho, na ordem, pulando o que ja existir:
 Python, Git, as bibliotecas, os reconhecedores de fala e os quatro
@@ -72,12 +77,32 @@ Tempo do caminho a mao: 20 minutos, quase tudo esperando o Windows.
 
 
 ---------------------------------------------------------
- NAO PRECISA BAIXAR NADA: JA ESTA TUDO AQUI
+ A PASTA INSTALADORES: ONDE ELA ESTA
 ---------------------------------------------------------
 
-Dentro desta pasta existe uma outra, chamada  Instaladores. Nela
-estao guardados os programas e os arquivos de que a instalacao
-precisa, nas versoes exatas em que tudo foi conferido:
+A instalacao usa uma pasta chamada  Instaladores , com os programas
+e arquivos de que ela precisa, nas versoes exatas em que tudo foi
+conferido. Ela pesa 1,1 GB.
+
+POR ISSO ELA NAO VEM JUNTO com o programa: nenhum repositorio de
+codigo aceita arquivos desse tamanho - o do Claude sozinho tem 306
+MB, e o limite do GitHub e 100 MB por arquivo.
+
+Ela fica guardada aqui:
+
+    https://drive.google.com/drive/folders/19REkp1EYtnQ42V-NU_FSUJ2GtzuPoOTs
+
+BAIXE-A E COLOQUE-A DENTRO DESTA MESMA PASTA, ao lado do
+INSTALAR_TUDO.bat, antes de comecar. O nome tem que ser exatamente
+Instaladores.
+
+E se voce nao baixar? Funciona do mesmo jeito, so que pela internet:
+o instalador percebe a falta e busca tudo na fonte oficial. Sao uns
+770 MB e alguns minutos a mais. A pasta existe para o dia em que a
+internet faltar, ou em que um link sair do ar, ou em que uma versao
+nova quebrar o que funcionava.
+
+O que ha dentro dela:
 
   Instaladores\programas
       python-3.13.1-amd64.exe        o Python
@@ -100,12 +125,10 @@ foi conferido. Nada nesta receita os executa, e voce tambem nao deve
 executa-los: passar um deles por cima do Claude que voce ja usa
 trocaria a versao dele.
 
-Isso ocupa 1,1 GB e existe por um motivo: link sai do ar, versao
-nova quebra o que funcionava, e internet pode faltar justamente no
-dia em que voce precisar reinstalar. Com esta pasta, os nove passos
-adiante funcionam com a internet desligada, do comeco ao fim. Ela so
-faria falta se o Claude Code ainda nao estivesse neste computador -
-e ai o problema seria outro, anterior a esta receita.
+Com essa pasta no lugar, os nove passos adiante funcionam com a
+internet desligada, do comeco ao fim. Ela so faria falta se o Claude
+Code ainda nao estivesse neste computador - e ai o problema seria
+outro, anterior a esta receita.
 
 Os links oficiais continuam anotados em cada passo, para o dia em
 que voce quiser atualizar alguma coisa de proposito.
