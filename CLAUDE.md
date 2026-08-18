@@ -309,6 +309,7 @@ ligado.
 | `teste_interruptor` | o que vira menu e o que segue para o Claude |
 | `teste_ganchos` | preservar o alheio, não duplicar, abortar em JSON quebrado |
 | `teste_diagnostico` | a conferência dos ganchos, inclusive o falso alarme |
+| `teste_som_ocupado` | "som ocupado" não pode parecer "a voz quebrou" |
 
 Dois detalhes que custaram tempo ao escrever os testes, e que voltarão a morder:
 `Fala()` recebe uma **lista** de pedaços de áudio (é assim que o microfone a
@@ -340,6 +341,19 @@ coberto em `teste_diagnostico`.
 `main()` trata `--diagnostico` **antes** do mutex, como as outras opções: conferir
 tem de funcionar com o programa ligado, que é quando se precisa disso. E o
 `__main__` virou `sys.exit(main() or 0)` para o `.bat` saber se achou problema.
+
+`--teste-voz`, `--teste-pronuncia` e o resumo falado do diagnóstico passam por
+`falar_esperando_a_vez()`, e não por `voz.falar()` direto. Motivo real: rodar o
+teste logo depois de uma resposta comprida encontra o **próprio leitor**
+falando e segurando a saída de som; o SAPI devolve `SPERR_DEVICE_BUSY`
+(`0x80045006`) e o teste despejava um traceback terminado num número — quem
+lesse concluiria que a voz quebrou, com a voz perfeita. Agora ele reconhece o
+caso, explica em português que **não é defeito**, e espera a vez.
+
+A trava que mantém isso honesto: só o número de "som ocupado" vira espera;
+**qualquer outro erro continua subindo**. Engolir tudo faria uma voz realmente
+quebrada passar por "ocupada", e o teste nunca acusaria nada. Está em
+`teste_som_ocupado`.
 
 ## Vocabulário e pronúncia
 

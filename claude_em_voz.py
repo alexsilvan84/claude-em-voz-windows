@@ -2487,6 +2487,49 @@ def listar_vozes():
         print("  %d. %s" % (i + 1, candidata.GetDescription()))
 
 
+# O Windows devolve este numero quando a saida de som ja esta ocupada por
+# outra voz. Ele aparece o tempo todo em uso normal: rodando um teste logo
+# depois de uma resposta comprida, o proprio leitor esta falando e segurando o
+# som. Sem tratar, o teste despeja um erro de varias linhas terminado num
+# numero - e quem le conclui que a voz quebrou, quando ela esta perfeita.
+SOM_OCUPADO = -2147201018        # SPERR_DEVICE_BUSY, ou 0x80045006
+
+
+def som_esta_ocupado(erro):
+    """O erro e "a saida de som esta ocupada", e nao um defeito de verdade?"""
+    for valor in (getattr(erro, "hresult", None),
+                  (erro.args[0] if getattr(erro, "args", None) else None)):
+        if valor in (SOM_OCUPADO, SOM_OCUPADO + 4294967296):
+            return True
+    return "0x80045006" in str(erro).lower()
+
+
+def falar_esperando_a_vez(voz, texto, tentativas=5, espera=4.0):
+    """
+    Fala, e se o som estiver ocupado, espera a vez em vez de desistir.
+
+    Quem ocupa quase sempre e o proprio leitor deste programa, falando a
+    resposta anterior - entao esperar resolve sozinho em poucos segundos.
+    """
+    for tentativa in range(1, tentativas + 1):
+        try:
+            voz.falar(texto)
+            return True
+        except Exception as erro:
+            if not som_esta_ocupado(erro):
+                raise
+            if tentativa == tentativas:
+                return False
+            if tentativa == 1:
+                print("\n[voz] A saida de som esta ocupada agora - o leitor")
+                print("      deve estar falando uma resposta. Isto NAO e")
+                print("      defeito: vou esperar a vez.")
+            print("      tentando de novo em %d s... (%d de %d)"
+                  % (int(espera), tentativa, tentativas - 1))
+            time.sleep(espera)
+    return False
+
+
 def testar_voz():
     """
     Fala tres frases seguidas de proposito: uma so nao testaria nada - o
@@ -2495,10 +2538,36 @@ def testar_voz():
     voz = montar_voz()
     if voz is None:
         print("Nao consegui falar.")
-        return
-    voz.falar("Primeira frase. O Claude em voz esta funcionando.")
-    voz.falar("Segunda frase. Se voce esta ouvindo isto, a fala nao emudeceu.")
-    voz.falar("Terceira frase. Teste concluido.")
+        return 1
+
+    frases = (
+        "Primeira frase. O Claude em voz esta funcionando.",
+        "Segunda frase. Se voce esta ouvindo isto, a fala nao emudeceu.",
+        "Terceira frase. Teste concluido.",
+    )
+
+    for numero, frase in enumerate(frases, start=1):
+        try:
+            if falar_esperando_a_vez(voz, frase):
+                continue
+        except Exception as erro:
+            print("\nA voz falhou na frase %d de 3:" % numero)
+            print("   ", erro)
+            print("\nConfira o que existe instalado com:")
+            print("    python claude_em_voz.py --vozes")
+            return 1
+
+        print("\nO som continuou ocupado o tempo todo, entao o teste nao")
+        print("chegou a acontecer. Nao ha defeito nenhum apontado ate aqui.")
+        print("\nO que fazer: espere o leitor terminar de falar e rode de")
+        print("novo. Se quiser silencio na hora, digite  /voz 1  na janela")
+        print("do Claude Code, faca o teste, e religue com  /voz 4 .")
+        return 1
+
+    print("\nAs tres frases foram faladas.")
+    print("Ouviu as TRES? Se ouviu so a primeira, e justamente o defeito que")
+    print("este teste existe para pegar - a fala emudece da segunda em diante.")
+    return 0
 
 
 def testar_pronuncia(termos=None):
@@ -2532,8 +2601,11 @@ def testar_pronuncia(termos=None):
 
     for escrito, falado in tabela:
         print("  %-16s ->  %s" % (escrito, falado))
-        voz.falar("Escrito: %s." % escrito)
-        voz.falar("Falado: %s." % falado)
+        if not falar_esperando_a_vez(voz, "Escrito: %s." % escrito):
+            print("\nO som ficou ocupado o tempo todo. Espere o leitor")
+            print("terminar de falar, ou digite  /voz 1  antes, e rode de novo.")
+            return 1
+        falar_esperando_a_vez(voz, "Falado: %s." % falado)
 
     print("-" * 62)
     return 0
@@ -2971,9 +3043,13 @@ def diagnosticar():
     frase = _resumo_falado(conferencia)
     if voz is not None:
         try:
-            voz.falar(frase)
+            if not falar_esperando_a_vez(voz, frase):
+                print("\nO som esta ocupado (o leitor deve estar falando), entao")
+                print("o resumo fica so escrito - o diagnostico acima vale igual:")
+                print(" ", frase)
         except Exception as erro:
             print("\n(nao consegui falar o resumo: %s)" % erro)
+            print(" ", frase)
     else:
         print("\nComo a voz nao respondeu, o resumo fica so escrito:")
         print(" ", frase)

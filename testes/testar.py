@@ -34,6 +34,7 @@ ARQUIVOS = [
     "teste_interruptor",
     "teste_ganchos",
     "teste_diagnostico",
+    "teste_som_ocupado",
 ]
 
 
